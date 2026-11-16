@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stride Talent | Creator Workspace</title>
+    <meta name="description" content="Your creator relationships, moving forward." />
+    <script>
+      // Apply dark mode and the Glass look before the page paints, so it doesn't flash white on load.
+      // Defaults match DEFAULT_APPEARANCE in src/appearance.js (Glass, dark).
+      try {
+        var saved = JSON.parse(localStorage.getItem('stride-talent-workspace:appearance:v1') || '{}');
+        var mode = saved.mode || 'dark';
+        var dark = mode === 'dark' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+        var root = document.documentElement;
+        root.setAttribute('data-mode', dark ? 'dark' : 'light');
+        // Looks saved before version 2 switch to Glass once (upgradeAppearance in src/appearance.js).
+        if ((saved.theme || 'glass') === 'glass' || !(Number(saved.version) >= 2)) {
+          root.setAttribute('data-look', 'glass');
+          root.style.background = dark ? '#040404' : '#e9e9eb';
+        }
+      } catch (e) {}
+    </script>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23245b4b'/%3E%3Cpath d='M11 21 21 11M13 11h8v8' stroke='%23fff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

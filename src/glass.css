@@ -1,0 +1,524 @@
+/* ==== Glass look ====
+ * Frosted, see-through panels over a near-black (dark) or studio-grey (light) backdrop, with a red accent,
+ * the Geist font and gentle motion. Turned on by data-look="glass" on <html> (Personalize > Colour theme > Glass,
+ * the default). Accent colours come from src/appearance.js; the moving light and specks from src/motion.jsx.
+ * Rules use :where() so they replace the colours in styles.css and dark.css without fighting their layout rules.
+ * Loaded last (see main.jsx). */
+
+html[data-look='glass'] {
+  --font-body: 'Geist Variable', Geist, 'Segoe UI', Arial, sans-serif;
+  --font-display: var(--font-body);
+  --glass-blur: blur(22px) saturate(150%);
+}
+html[data-look='glass'][data-mode='dark'] {
+  color-scheme: dark;
+  --ink: #ffffff;
+  --text-2: #e4e4e6;
+  --text-muted: #a9a9a9;
+  --text-subtle: #8a8a8a;
+  --line: rgb(255 255 255 / 0.085);
+  --line-strong: rgb(255 255 255 / 0.15);
+  --surface: rgb(22 22 24 / 0.55);
+  --raised: rgb(255 255 255 / 0.06);
+  --raised-hover: rgb(255 255 255 / 0.1);
+  --glass-side: rgb(20 20 22 / 0.5);
+  --glass-solid: rgb(17 17 19 / 0.88);
+  --glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.07);
+  --glass-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.75);
+  --highlight: rgb(255 255 255 / 0.08);
+  --primary-bg: #f5f5f5;
+  --primary-ink: #0a0a0a;
+  --primary-hover: #ffffff;
+  --beam: rgb(255 255 255 / 0.2);
+  --beam-soft: rgb(255 255 255 / 0.075);
+  --vignette: rgb(0 0 0 / 0.55);
+}
+html[data-look='glass'][data-mode='light'] {
+  --ink: #111111;
+  --text-2: #2a2a2c;
+  --text-muted: #505052;
+  --text-subtle: #616163;
+  --line: rgb(0 0 0 / 0.08);
+  --line-strong: rgb(0 0 0 / 0.14);
+  --surface: rgb(255 255 255 / 0.55);
+  --raised: rgb(255 255 255 / 0.62);
+  --raised-hover: rgb(255 255 255 / 0.9);
+  --glass-side: rgb(255 255 255 / 0.45);
+  --glass-solid: rgb(248 248 249 / 0.92);
+  --glass-edge: inset 0 1px 0 rgb(255 255 255 / 0.85);
+  --glass-shadow: 0 20px 44px -24px rgb(0 0 0 / 0.28);
+  --highlight: rgb(255 255 255 / 0.75);
+  --primary-bg: #111111;
+  --primary-ink: #ffffff;
+  --primary-hover: #000000;
+  --beam: rgb(255 255 255 / 0.85);
+  --beam-soft: rgb(255 255 255 / 0.35);
+  --vignette: rgb(0 0 0 / 0.07);
+}
+
+:where(html[data-look='glass']) body {
+  color: var(--ink);
+  background: var(--page-bg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- The backdrop: a soft light beam, a vignette and (in motion.jsx) drifting specks ---- */
+.glassBackdrop::before,
+.glassBackdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.glassBackdrop::before {
+  background:
+    radial-gradient(60% 55% at 62% -6%, var(--beam), transparent 70%),
+    linear-gradient(104deg, transparent 40%, var(--beam-soft) 50%, transparent 62%);
+}
+.glassBackdrop::after {
+  background: radial-gradient(120% 90% at 50% 40%, transparent 55%, var(--vignette));
+}
+.glassBackdrop.moving::before {
+  animation: glassBeam 9s ease-in-out infinite alternate;
+}
+.glassSpecks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+@keyframes glassBeam {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- Glass surfaces ---- */
+:where(html[data-look='glass']) :is(
+  .panel, .stats > button, .rule, .eligibility, .workspaceGuide, .templateHint, .deckCard, .rateBox,
+  .callGuide, .backupCard, .securityStatus, .erCalc, .workflowSection, .priceCard, .day, .pipeline button
+) {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--glass-edge), var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+/* Cards that sit on another glass panel don't need their own blur (it's costly and invisible there). */
+:where(html[data-look='glass']) :is(.workflowSection, .backupCard, .securityStatus, .erCalc, .priceCard, .deckCard, .callGuide, .rateBox, .eligibility) {
+  box-shadow: var(--glass-edge);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+:where(html[data-look='glass']) :is(.day, .pipeline button) {
+  border-radius: 12px;
+  box-shadow: var(--glass-edge);
+}
+html[data-look='glass'] .pipeline button {
+  background: var(--raised);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html[data-look='glass'] .pipeline button.chosen {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: var(--accent);
+}
+/* Calendar items keep their coloured edge for the item type. */
+html[data-look='glass'] .chip {
+  background: var(--raised);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--type);
+  border-radius: 9px;
+  box-shadow: none;
+}
+html[data-look='glass'] .chip:hover {
+  background: var(--raised-hover);
+  border-color: var(--line-strong);
+  border-left-color: var(--type);
+}
+html[data-look='glass'] :is(.chipBell, .legend .legendHint, .chip.done .chipBody b) {
+  color: var(--text-subtle);
+}
+html[data-look='glass'] .addInDay {
+  color: var(--text-muted);
+  border-color: var(--line-strong);
+}
+:where(html[data-look='glass']) .day.friday {
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
+}
+:where(html[data-look='glass']) .day.dropping,
+:where(html[data-look='glass']) .pipeline .chosen {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+}
+/* Windows that sit over everything: more solid, so text stays easy to read. */
+:where(html[data-look='glass']) :is(.drawer, .templateModal, .lockCard) {
+  color: var(--ink);
+  background: var(--glass-solid);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--glass-edge), 0 30px 80px -20px rgb(0 0 0 / 0.6);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+}
+:where(html[data-look='glass']) .drawerFoot {
+  background: transparent;
+  border-color: var(--line);
+}
+:where(html[data-look='glass']) .overlay {
+  background: rgb(0 0 0 / 0.45);
+}
+:where(html[data-look='glass']) .overlay.clear {
+  background: rgb(0 0 0 / 0.2);
+}
+:where(html[data-look='glass']) .toast {
+  color: #fff;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* ---- Controls ---- */
+:where(html[data-look='glass']) :is(button, input, textarea, select) {
+  color: var(--ink);
+  background: var(--raised);
+  border-color: var(--line);
+}
+:where(html[data-look='glass']) button:hover {
+  background: var(--raised-hover);
+}
+:where(html[data-look='glass']) :is(input, textarea, select):focus {
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+:where(html[data-look='glass']) :is(input, textarea)::placeholder {
+  color: var(--text-subtle);
+}
+:where(html[data-look='glass']) select option {
+  color: #111;
+  background: #fff;
+}
+:where(html[data-look='glass']) :is(button:focus-visible, a:focus-visible, tr:focus-visible) {
+  outline-color: var(--accent);
+}
+:where(html[data-look='glass']) :is(.primary, .deckActions a) {
+  color: var(--primary-ink);
+  background: var(--primary-bg);
+  border-color: var(--primary-bg);
+  border-radius: 999px;
+  font-weight: 600;
+}
+:where(html[data-look='glass']) :is(.primary, .deckActions a):hover {
+  background: var(--primary-hover);
+}
+:where(html[data-look='glass']) :is(
+  .search, .filters button, .completeness, .generated, .imageControls, .segmented, .templateTop > span,
+  .template .copy, .empty button, .personalizeBtn, .modeToggle, .importErrors button, label.importChoice
+) {
+  background: var(--raised);
+  border-color: var(--line);
+}
+:where(html[data-look='glass']) .filters button {
+  border-radius: 999px;
+}
+:where(html[data-look='glass']) .filters .chosen,
+:where(html[data-look='glass']) .callList button.selected {
+  color: var(--ink);
+  background: var(--highlight);
+  border-color: var(--line-strong);
+}
+:where(html[data-look='glass']) .segmented button[aria-pressed='true'] {
+  color: var(--ink);
+  background: var(--highlight);
+  border-color: var(--line-strong);
+}
+:where(html[data-look='glass']) .search input,
+:where(html[data-look='glass']) .nicheRow,
+:where(html[data-look='glass']) .addInDay,
+:where(html[data-look='glass']) .upNext {
+  background: transparent;
+}
+:where(html[data-look='glass']) :is(.progress, .nicheBar) {
+  background: var(--raised);
+}
+:where(html[data-look='glass']) .progress i {
+  background: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+:where(html[data-look='glass']) .blueProgress i {
+  background: var(--ink);
+  box-shadow: none;
+}
+
+/* ---- Tables ---- */
+:where(html[data-look='glass']) th {
+  color: var(--text-subtle);
+  background: var(--raised);
+  border-block-color: var(--line);
+}
+:where(html[data-look='glass']) td {
+  color: var(--text-muted);
+  border-bottom-color: var(--line);
+}
+:where(html[data-look='glass']) :is(tbody tr:hover, .focus > button:hover) {
+  background: var(--raised);
+}
+:where(html[data-look='glass']) .focus > button {
+  background: transparent;
+  border-color: transparent;
+  border-top-color: var(--line);
+}
+
+/* ---- Text ---- */
+:where(html[data-look='glass']) :is(h1, h2, h3, header b, td strong, .deckInfo b, .empty h3, .stats strong, .panelHead h2) {
+  color: var(--ink);
+}
+:where(html[data-look='glass']) h1 {
+  font-weight: 600;
+  letter-spacing: -1.2px;
+}
+:where(html[data-look='glass']) :is(.modebar b, .pricingNotes > b, .pricingNotes li b, .howTo ol b) {
+  color: var(--text-2);
+}
+:where(html[data-look='glass']) :is(
+  nav button, label, .sidecard p, .modebar button, .stats > button > span, .resultcount, .panelHead button,
+  .completeness, .generated, .eligibility, .template p, .callGuide p, .callGuide ol, .workspaceGuide, .pricingNotes,
+  .howTo ol, .bgTile > i, .heading p, .backupCard p, .backupCard small, .restorePreview p, .undoRow, .lockCard > p,
+  .lockMore, .securityPoints, .securityStatus p, .importChoice small, .importPreview, .importNotes, .erHead small,
+  .erResult small, .help, .rule > span, .weekProgress, .dayHead small, .chipBody small, .pipeline span, .upNext small,
+  .legend, .profile small
+) {
+  color: var(--text-muted);
+}
+:where(html[data-look='glass']) :is(
+  .eyebrow, .workspaceLabel, header, .modebar, .empty, .history, .deckInfo p, .stats small, .stats footer,
+  .stats > button > span svg, .dayEmpty, .panelHead span
+) {
+  color: var(--text-subtle);
+}
+:where(html[data-look='glass']) :is(.greenText, .callForm h4, .empty button, .template .copy, .guideLink, .callGuide a, .workspaceGuide a, .socialLinks a, .rule button, .eligibility button, .workspaceGuide summary, .sidecard button, .leaf, .ruleIcon) {
+  color: var(--accent-text);
+}
+:where(html[data-look='glass']) .rule b {
+  color: var(--ink);
+}
+:where(html[data-look='glass']) .orangeText {
+  color: var(--accent-text) !important;
+}
+
+/* ---- Sidebar ---- */
+html[data-look='glass'] aside {
+  inset: 14px auto 14px 14px;
+  width: 236px;
+  padding: 26px 14px 16px;
+  overflow-y: auto;
+  background: var(--glass-side);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--glass-edge), var(--glass-shadow);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  backdrop-filter: blur(26px) saturate(150%);
+  scrollbar-width: none;
+}
+html[data-look='glass'] main {
+  margin-left: 264px;
+}
+html[data-look='glass'] .brand {
+  color: var(--brand);
+  width: auto;
+  margin: 0 12px 34px;
+  font-size: 27px;
+  letter-spacing: -1.4px;
+  font-weight: 700;
+}
+html[data-look='glass'] .brand span {
+  color: var(--text-subtle);
+  letter-spacing: 4.4px;
+  margin-top: 7px;
+  font-size: 9px;
+}
+html[data-look='glass'] .brand i {
+  color: var(--accent);
+  font-size: 24px;
+  top: -6px;
+  right: auto;
+  left: 128px;
+}
+html[data-look='glass'] .workspaceLabel {
+  margin: 0 12px 10px;
+  letter-spacing: 1.6px;
+}
+html[data-look='glass'] nav {
+  gap: 2px;
+}
+html[data-look='glass'] nav button,
+html[data-look='glass'] .sideTools button {
+  color: var(--text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 11px;
+  padding: 11px 12px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+html[data-look='glass'] nav button:hover,
+html[data-look='glass'] .sideTools button:hover {
+  color: var(--ink);
+  background: transparent;
+}
+html[data-look='glass'] nav button.active {
+  color: var(--ink);
+  background: transparent;
+  font-weight: 600;
+}
+html[data-look='glass'] nav button b {
+  color: #fff;
+  background: var(--accent);
+  border-radius: 999px;
+  min-width: 18px;
+  padding: 2px 6px;
+  text-align: center;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+html[data-look='glass'] .navIndicator {
+  background: var(--highlight);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  box-shadow: var(--glass-edge);
+}
+html[data-look='glass'] .navIndicator::before {
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+html[data-look='glass'] .sideTools {
+  border-top-color: var(--line);
+}
+html[data-look='glass'] .sidecard {
+  background: var(--raised);
+  border-color: var(--line);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  padding: 14px;
+}
+html[data-look='glass'] .sidecard strong {
+  font-size: 13px;
+  line-height: 1.45;
+}
+html[data-look='glass'] .sidecard p {
+  margin: 6px 0 8px;
+  line-height: 1.6;
+}
+html[data-look='glass'] .leaf {
+  background: var(--raised);
+  width: 28px;
+  height: 28px;
+  margin-bottom: 10px;
+}
+html[data-look='glass'] .profile {
+  border-top-color: var(--line);
+}
+html[data-look='glass'] :is(.avatar, .miniAvatar, .ownerDot) {
+  color: var(--ink);
+  background: var(--highlight);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+html[data-look='glass'] :is(.online, .private i, .liveDot:not(.sample)) {
+  background: var(--ink);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--ink) 60%, transparent);
+}
+html[data-look='glass'] .modeToggle {
+  color: var(--text-muted);
+  border-radius: 999px;
+}
+/* Icon tiles: plain glass instead of coloured squares */
+html[data-look='glass'] :is(.taskIcon, .orangeIcon, .blueIcon, .greenIcon) {
+  color: var(--ink);
+  background: var(--raised);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+/* Niche bars in shades of white, like the rest of the look */
+html[data-look='glass'] .nicheRow .nicheBar i {
+  background: var(--ink) !important;
+}
+html[data-look='glass'] .nicheRow:nth-child(2n) .nicheBar i {
+  opacity: 0.55;
+}
+html[data-look='glass'] .nicheRow :is(.dot, i:not(.nicheBar i)) {
+  background: var(--ink) !important;
+}
+
+/* ---- Top bar ---- */
+html[data-look='glass'] header {
+  background: transparent;
+  border-bottom-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html[data-look='glass'] .private {
+  border-radius: 999px;
+  padding: 7px 12px;
+}
+
+/* ---- Cards ---- */
+html[data-look='glass'] .stats > button {
+  border-radius: 18px;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+html[data-look='glass'] .stats > button:hover {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+html[data-look='glass'] .stats strong {
+  font-weight: 600;
+  letter-spacing: -1.4px;
+  font-variant-numeric: tabular-nums;
+}
+html[data-look='glass'] .panel {
+  border-radius: 18px;
+}
+html[data-look='glass'] :is(.taskIcon, .backupIcon, .platformIcon, .deckIcon) {
+  border-radius: 10px;
+}
+
+/* ---- Lock screen ---- */
+html[data-look='glass'] .lockScreen {
+  background: transparent;
+}
+
+/* ---- Small screens: the sidebar becomes a frosted bar across the top ---- */
+@media (max-width: 1200px) {
+  html[data-look='glass'] aside {
+    width: 212px;
+  }
+  html[data-look='glass'] main {
+    margin-left: 238px;
+  }
+}
+@media (max-width: 800px) {
+  html[data-look='glass'] aside {
+    position: sticky;
+    top: 8px;
+    z-index: 5;
+    width: auto;
+    margin: 8px 8px 0;
+    padding: 12px 12px 10px;
+    border-radius: 18px;
+    overflow: visible;
+  }
+  html[data-look='glass'] main {
+    margin-left: 0;
+  }
+  html[data-look='glass'] .brand {
+    margin: 0 4px;
+    font-size: 23px;
+  }
+  html[data-look='glass'] .brand i {
+    left: 108px;
+    font-size: 20px;
+  }
+}

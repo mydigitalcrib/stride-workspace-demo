@@ -1,0 +1,341 @@
+/* ==== Dark mode ====
+ * Turned on by data-mode="dark" on <html> (Personalize > Mode, or the moon button in the header).
+ * Rules use :where() so they match the original selectors' strength and simply replace
+ * their light colours. Accent colours come from src/appearance.js.
+ * Loaded after styles.css (see main.jsx). */
+
+html[data-mode='dark'] {
+  color-scheme: dark;
+  --ink: #e3eae6;
+  --line: #2c3732;
+  --surface: #1b2320;
+  --raised: #222c28;
+  --text-2: #c9d3cd;
+  --text-muted: #a4b0a9;
+  --text-subtle: #8d9a92;
+  /* Sage in dark, used until the app applies the chosen theme */
+  --page-bg: #121715;
+  --sidebar-bg: #171f1b;
+  --sidebar-card: #1f2c26;
+  --accent: #4d8a72;
+  --accent-hover: #3f715d;
+  --accent-soft: #233630;
+  --accent-softer: #1f2e29;
+  --accent-wash: #1d2a25;
+  --accent-badge: #2e4a3f;
+  --accent-text: #9ed0b9;
+  --accent-muted: #8fc4ab;
+  --on-accent: #ffffff;
+  --brand: #bfe0d1;
+  --toast-bg: #27453a;
+}
+
+/* ---- Surfaces ---- */
+:where(html[data-mode='dark']) button,
+:where(html[data-mode='dark']) input,
+:where(html[data-mode='dark']) textarea,
+:where(html[data-mode='dark']) select {
+  color: var(--ink);
+  background: var(--raised);
+  border-color: var(--line);
+}
+:where(html[data-mode='dark']) input::placeholder,
+:where(html[data-mode='dark']) textarea::placeholder {
+  color: #6f7d76;
+}
+:where(html[data-mode='dark']) .panel,
+:where(html[data-mode='dark']) .drawer,
+:where(html[data-mode='dark']) .templateModal,
+:where(html[data-mode='dark']) .focus > button,
+:where(html[data-mode='dark']) .callList button,
+:where(html[data-mode='dark']) .deckCard,
+:where(html[data-mode='dark']) .rateBox,
+:where(html[data-mode='dark']) .pricing.compact .priceCard,
+:where(html[data-mode='dark']) .segmented button[aria-pressed='true'] {
+  background: var(--surface);
+  border-color: var(--line);
+}
+:where(html[data-mode='dark']) .panel,
+:where(html[data-mode='dark']) .stats > button {
+  box-shadow: none;
+}
+:where(html[data-mode='dark']) .focus > button {
+  border-top-color: var(--line);
+}
+:where(html[data-mode='dark']) .focus > button:hover,
+:where(html[data-mode='dark']) tbody tr:hover {
+  background: var(--raised);
+}
+:where(html[data-mode='dark']) .search,
+:where(html[data-mode='dark']) .filters button,
+:where(html[data-mode='dark']) .completeness,
+:where(html[data-mode='dark']) .generated,
+:where(html[data-mode='dark']) .priceCard,
+:where(html[data-mode='dark']) .imageControls,
+:where(html[data-mode='dark']) .segmented,
+:where(html[data-mode='dark']) .templateTop > span,
+:where(html[data-mode='dark']) .template .copy,
+:where(html[data-mode='dark']) .empty button,
+:where(html[data-mode='dark']) .personalizeBtn,
+:where(html[data-mode='dark']) .modeToggle,
+:where(html[data-mode='dark']) .importErrors button {
+  background: var(--raised);
+  border-color: var(--line);
+}
+:where(html[data-mode='dark']) .search input,
+:where(html[data-mode='dark']) .nicheRow {
+  background: transparent;
+}
+:where(html[data-mode='dark']) .workflowSection {
+  background: #1f2824;
+  border-color: var(--line);
+}
+:where(html[data-mode='dark']) .drawerFoot {
+  background: #18201d;
+}
+:where(html[data-mode='dark']) .progress,
+:where(html[data-mode='dark']) .nicheBar {
+  background: #2a3530;
+}
+:where(html[data-mode='dark']) th {
+  color: var(--text-subtle);
+  background: #1f2824;
+  border-block-color: var(--line);
+}
+:where(html[data-mode='dark']) td {
+  color: var(--text-muted);
+  border-bottom-color: var(--line);
+}
+:where(html[data-mode='dark']) aside,
+:where(html[data-mode='dark']) .profile,
+:where(html[data-mode='dark']) .history p,
+:where(html[data-mode='dark']) .callForm {
+  border-color: var(--line);
+}
+:where(html[data-mode='dark']) header {
+  color: var(--text-subtle);
+  background: rgb(18 23 21 / 0.72);
+}
+html[data-mode='dark'][data-bg-text='light'] header {
+  background: rgb(18 23 21 / 0.92);
+}
+
+/* ---- Text ---- */
+:where(html[data-mode='dark']) header b,
+:where(html[data-mode='dark']) td strong,
+:where(html[data-mode='dark']) .deckInfo b,
+:where(html[data-mode='dark']) .empty h3,
+:where(html[data-mode='dark']) .rateBox .tiktok {
+  color: var(--ink);
+}
+:where(html[data-mode='dark']) .modebar b,
+:where(html[data-mode='dark']) .pricingNotes > b,
+:where(html[data-mode='dark']) .pricingNotes li b,
+:where(html[data-mode='dark']) .howTo ol b {
+  color: var(--text-2);
+}
+:where(html[data-mode='dark']) nav button,
+:where(html[data-mode='dark']) label,
+:where(html[data-mode='dark']) .sidecard p,
+:where(html[data-mode='dark']) .modebar button,
+:where(html[data-mode='dark']) .stats > button > span,
+:where(html[data-mode='dark']) .resultcount,
+:where(html[data-mode='dark']) .panelHead button,
+:where(html[data-mode='dark']) .completeness,
+:where(html[data-mode='dark']) .generated,
+:where(html[data-mode='dark']) .eligibility,
+:where(html[data-mode='dark']) .template p,
+:where(html[data-mode='dark']) .callGuide p,
+:where(html[data-mode='dark']) .callGuide ol,
+:where(html[data-mode='dark']) .workspaceGuide,
+:where(html[data-mode='dark']) .pricingNotes,
+:where(html[data-mode='dark']) .howTo ol,
+:where(html[data-mode='dark']) .bgTile > i {
+  color: var(--text-muted);
+}
+:where(html[data-mode='dark']) .modebar,
+:where(html[data-mode='dark']) .empty,
+:where(html[data-mode='dark']) .history,
+:where(html[data-mode='dark']) .deckInfo p {
+  color: var(--text-subtle);
+}
+:where(html[data-mode='dark']) .greenText,
+:where(html[data-mode='dark']) .callForm h4,
+:where(html[data-mode='dark']) .empty button,
+:where(html[data-mode='dark']) .template .copy {
+  color: var(--accent-text);
+}
+
+/* ---- Avatars, icons and status badges ---- */
+:where(html[data-mode='dark']) .avatar,
+:where(html[data-mode='dark']) .templateTop > span {
+  color: #b3c79a;
+  background: #26321f;
+}
+:where(html[data-mode='dark']) .a1 {
+  color: #e0c69a;
+  background: #3a3122;
+}
+:where(html[data-mode='dark']) .a2 {
+  color: #9ec3cf;
+  background: #1f3035;
+}
+:where(html[data-mode='dark']) .a3 {
+  color: #c8b0dc;
+  background: #2f2638;
+}
+:where(html[data-mode='dark']) .a4 {
+  color: #e3b2a3;
+  background: #3a2722;
+}
+:where(html[data-mode='dark']) .miniAvatar,
+:where(html[data-mode='dark']) .ownerDot {
+  color: #b8c7b0;
+  background: #26322c;
+}
+:where(html[data-mode='dark']) .leaf {
+  background: #1b2621;
+}
+:where(html[data-mode='dark']) .green {
+  color: #9fd19c;
+  background: #1f3322;
+}
+:where(html[data-mode='dark']) .gray {
+  color: #aab1a3;
+  background: #272e2a;
+}
+:where(html[data-mode='dark']) .blue {
+  color: #9fc3e0;
+  background: #1d2d3b;
+}
+:where(html[data-mode='dark']) .purple {
+  color: #cdb6e0;
+  background: #2c2438;
+}
+:where(html[data-mode='dark']) .red {
+  color: #e9a99a;
+  background: #3a2421;
+}
+:where(html[data-mode='dark']) .orange {
+  color: #e6c08c;
+  background: #392d1d;
+}
+/* The link-card icons reuse the green/purple class names, so restore their own colours. */
+:where(html[data-mode='dark']) .deckIcon {
+  color: #fff;
+}
+:where(html[data-mode='dark']) .deckIcon.green {
+  background: #3f7a5f;
+}
+:where(html[data-mode='dark']) .deckIcon.purple {
+  background: #7d64a0;
+}
+:where(html[data-mode='dark']) .orangeIcon {
+  color: #e2b98a;
+  background: #3a2f22;
+}
+:where(html[data-mode='dark']) .blueIcon {
+  color: #9fb8d8;
+  background: #222f3d;
+}
+:where(html[data-mode='dark']) .greenIcon {
+  color: #b3c79a;
+  background: #26321f;
+}
+:where(html[data-mode='dark']) .platformIcon.instagram {
+  color: #f08db3;
+  background: #3a2230;
+}
+:where(html[data-mode='dark']) .platformIcon.tiktok {
+  color: #121715;
+  background: #e3eae6;
+}
+:where(html[data-mode='dark']) .platformIcon.youtube {
+  color: #f0907f;
+  background: #3a2421;
+}
+:where(html[data-mode='dark']) .rateBox .instagram {
+  color: #f08db3;
+}
+:where(html[data-mode='dark']) .rateBox .youtube {
+  color: #f0907f;
+}
+
+/* ---- Messages ---- */
+:where(html[data-mode='dark']) .error {
+  color: #f0a796;
+  background: #3a2421;
+}
+:where(html[data-mode='dark']) .notice,
+:where(html[data-mode='dark']) .pricingNotes .warn {
+  color: #e8c98a;
+  background: #3a3120;
+}
+:where(html[data-mode='dark']) .importErrors button {
+  color: #f0a796;
+}
+
+/* ---- Back up & restore ---- */
+:where(html[data-mode='dark']) .backupCard {
+  background: var(--raised);
+  border-color: var(--line);
+}
+:where(html[data-mode='dark']) .backupCard p,
+:where(html[data-mode='dark']) .backupCard small,
+:where(html[data-mode='dark']) .restorePreview p,
+:where(html[data-mode='dark']) .undoRow {
+  color: var(--text-muted);
+}
+:where(html[data-mode='dark']) .restorePreview .replaceWarning {
+  color: #f0a796;
+}
+
+/* ---- Password & lock ---- */
+:where(html[data-mode='dark']) .lockCard {
+  background: var(--surface);
+  border-color: var(--line);
+  box-shadow: none;
+}
+:where(html[data-mode='dark']) .lockCard > p,
+:where(html[data-mode='dark']) .lockMore,
+:where(html[data-mode='dark']) .securityPoints,
+:where(html[data-mode='dark']) .securityStatus p {
+  color: var(--text-muted);
+}
+:where(html[data-mode='dark']) .eraseConfirm {
+  background: #3a2421;
+}
+:where(html[data-mode='dark']) .eraseConfirm p {
+  color: #f0a796;
+}
+:where(html[data-mode='dark']) .forgotWarning {
+  color: #e8c98a;
+  background: #3a3120;
+}
+:where(html[data-mode='dark']) .securityStatus {
+  background: var(--raised);
+  border-color: var(--line);
+}
+
+/* ---- Auto-save status ---- */
+:where(html[data-mode='dark']) .backupCard.autoSave.failing .backupIcon {
+  color: #f0a796;
+  background: #3a2421;
+}
+
+/* ---- CSV import window & ER calculator ---- */
+:where(html[data-mode='dark']) label.importChoice {
+  background: var(--raised);
+  border-color: var(--line);
+}
+:where(html[data-mode='dark']) .erCalc {
+  background: var(--surface);
+  border-color: #33403a;
+}
+:where(html[data-mode='dark']) .importChoice small,
+:where(html[data-mode='dark']) .importPreview,
+:where(html[data-mode='dark']) .importNotes,
+:where(html[data-mode='dark']) .erHead small,
+:where(html[data-mode='dark']) .erResult small {
+  color: var(--text-muted);
+}
