@@ -845,10 +845,6 @@ export default function App() {
                   {lastBackup ? 'Time for a backup' : 'Back up your data'}
                 </button>
               )}
-              <button onClick={() => setSampleMode(!sampleMode)}>
-                {sampleMode ? 'Switch to my workspace' : 'Explore sample data'}
-                <ArrowRight size={14} />
-              </button>
             </div>
           </div>
 
